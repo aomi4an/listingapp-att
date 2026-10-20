@@ -1,0 +1,20 @@
+<div class="head">
+  <h1>Объявления</h1>
+  <button type="button" class="refresh" (click)="refresh()"
+          [disabled]="listings.isLoading() || districts.isLoading()">
+    {{ listings.isLoading() || districts.isLoading() ? 'Обновляем…' : 'Обновить' }}
+  </button>
+</div>
+
+<app-listing-filter [districts]="districtList()" (filterChange)="onFilter($event)" />
+
+@if (listings.isLoading()) {
+  <app-skeleton [count]="6" />
+} @else if (listings.error(); as err) {
+  <div class="error-box">
+    <p>{{ err | errorMessage }}</p>
+    <button type="button" (click)="listings.reload()">Повторить</button>
+  </div>
+} @else if (listings.hasValue()) {
+  <app-listing-list [listings]="visible()" [total]="total()" />
+}

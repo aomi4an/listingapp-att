@@ -1,0 +1,79 @@
+<p><a [routerLink]="isEdit() ? ['/listings', id()] : ['/']">← Назад</a></p>
+<h1>{{ isEdit() ? 'Редактирование' : 'Новое объявление' }}</h1>
+
+@if (generalError(); as msg) {
+  <div class="error-box">{{ msg }}</div>
+}
+
+@if (isEdit() && listing.isLoading()) {
+  <p class="muted">Загрузка объявления…</p>
+} @else if (isEdit() && listing.error(); as err) {
+  <div class="error-box">{{ err | errorMessage }}</div>
+} @else {
+  <form (submit)="save($event)" novalidate class="form">
+    <label class="field">
+      <span>Заголовок *</span>
+      <input [formField]="listingForm.title" placeholder="2-комнатная у метро" />
+      <small class="counter" [class.over]="titleLength() > titleMax">{{ titleLength() }} / {{ titleMax }}</small>
+      @if (listingForm.title().touched()) {
+        @for (e of listingForm.title().errors(); track $index) {
+          <small class="field-error">{{ e.message }}</small>
+        }
+      }
+    </label>
+
+    <div class="row">
+      <label class="field">
+        <span>Цена, у.е. *</span>
+        <input type="number" [formField]="listingForm.price" />
+        @if (listingForm.price().touched()) {
+          @for (e of listingForm.price().errors(); track $index) {
+            <small class="field-error">{{ e.message }}</small>
+          }
+        }
+      </label>
+
+      <label class="field">
+        <span>Комнат *</span>
+        <input type="number" [formField]="listingForm.rooms" />
+        @if (listingForm.rooms().touched()) {
+          @for (e of listingForm.rooms().errors(); track $index) {
+            <small class="field-error">{{ e.message }}</small>
+          }
+        }
+      </label>
+    </div>
+
+    <label class="field">
+      <span>Район *</span>
+      <select [formField]="listingForm.districtId">
+        <option value="">— выберите район —</option>
+        @for (d of districtList(); track d.id) {
+          <option [value]="d.id">{{ d.name }}</option>
+        }
+      </select>
+      @if (listingForm.districtId().touched()) {
+        @for (e of listingForm.districtId().errors(); track $index) {
+          <small class="field-error">{{ e.message }}</small>
+        }
+      }
+    </label>
+
+    <label class="field">
+      <span>Адрес</span>
+      <input [formField]="listingForm.address" placeholder="ул. Бунёдкор, 5" />
+      @if (listingForm.address().touched()) {
+        @for (e of listingForm.address().errors(); track $index) {
+          <small class="field-error">{{ e.message }}</small>
+        }
+      }
+    </label>
+
+    <div class="actions">
+      <button type="submit" class="primary" [disabled]="listingForm().submitting()">
+        {{ listingForm().submitting() ? 'Сохраняем…' : 'Сохранить' }}
+      </button>
+      <a [routerLink]="isEdit() ? ['/listings', id()] : ['/']" class="cancel">Отмена</a>
+    </div>
+  </form>
+}

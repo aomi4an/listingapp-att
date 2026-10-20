@@ -1,0 +1,13 @@
+.form { display: grid; gap: 16px; max-width: 560px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: grid; gap: 4px; }
+.field span { font-weight: 600; font-size: 14px; }
+.field input, .field select { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; }
+.field:has(.field-error) input, .field:has(.field-error) select { border-color: #b91c1c; }
+.field-error { color: #b91c1c; }
+.counter { color: #6b7280; justify-self: end; }
+.counter.over { color: #b91c1c; font-weight: 600; }
+.actions { display: flex; gap: 16px; align-items: center; }
+.primary { background: #0f766e; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; }
+.primary:disabled { opacity: .6; cursor: wait; }
+.cancel { color: #6b7280; }

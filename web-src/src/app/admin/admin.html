@@ -1,0 +1,123 @@
+<main class="container">
+  <header class="top">
+    <h1>Управление объявлениями</h1>
+    <button type="button" (click)="back()">← На сайт</button>
+  </header>
+
+  @if (!authorized()) {
+    <section class="panel narrow">
+      <h2>Вход</h2>
+      <p class="muted">Введите ключ администратора (значение <code>Admin__ApiKey</code> на сервере).
+        Если ключ на сервере не задан, оставьте поле пустым.</p>
+      <div class="row">
+        <input type="password" placeholder="Ключ" [value]="key()" (input)="onKey($event)" (keydown.enter)="login()">
+        <button type="button" class="primary" [disabled]="checking()" (click)="login()">Войти</button>
+      </div>
+      @if (error()) { <p class="error">{{ error() }}</p> }
+    </section>
+  } @else {
+    @if (message()) { <p class="ok" role="status">{{ message() }}</p> }
+    @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+
+    <section class="panel">
+      <div class="row between">
+        <h2>Объявления <span class="muted">({{ listings().length }})</span></h2>
+        <div class="row">
+          <button type="button" class="primary" (click)="startNew()">Добавить объявление</button>
+          <button type="button" (click)="logout()">Выйти</button>
+        </div>
+      </div>
+
+      @if (draft(); as d) {
+        <div class="form">
+          <h3>{{ d.id === null ? 'Новое объявление' : 'Объявление № ' + d.id }}</h3>
+
+          <label>Название
+            <input type="text" maxlength="200" [value]="d.title" (input)="setField('title', $event)">
+          </label>
+
+          <div class="grid">
+            <label>Цена, у.е.
+              <input type="number" min="1" [value]="d.price" (input)="setField('price', $event)">
+            </label>
+            <label>Комнат
+              <input type="number" min="1" max="10" [value]="d.rooms" (input)="setField('rooms', $event)">
+            </label>
+            <label>Район
+              <select [value]="d.districtId" (change)="setField('districtId', $event)">
+                <option value="">— выберите —</option>
+                @for (dist of districts(); track dist.id) {
+                  <option [value]="dist.id" [selected]="dist.id.toString() === d.districtId">{{ dist.name }}</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <label>Адрес (необязательно)
+            <input type="text" maxlength="300" [value]="d.address" (input)="setField('address', $event)">
+          </label>
+
+          <div class="row">
+            <button type="button" class="primary" [disabled]="busy()" (click)="save()">Сохранить</button>
+            <button type="button" (click)="cancel()">Отмена</button>
+          </div>
+        </div>
+      }
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Название</th><th>Район</th><th>Комн.</th><th>Цена</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (l of listings(); track l.id) {
+              <tr>
+                <td>{{ l.id }}</td>
+                <td>{{ l.title }}</td>
+                <td>{{ l.districtName }}</td>
+                <td>{{ l.rooms }}</td>
+                <td>{{ l.price | number:'1.0-0' }}</td>
+                <td class="actions">
+                  <button type="button" (click)="startEdit(l)">Изменить</button>
+                  <button type="button" class="danger" [disabled]="busy()" (click)="remove(l)">Удалить</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="muted">Объявлений пока нет — добавьте первое.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Районы</h2>
+      <div class="row">
+        <input type="text" maxlength="100" placeholder="Название нового района"
+               [value]="newDistrict()" (input)="onNewDistrict($event)" (keydown.enter)="addDistrict()">
+        <button type="button" class="primary" [disabled]="busy()" (click)="addDistrict()">Добавить район</button>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Название</th><th>Объявлений</th><th></th></tr></thead>
+          <tbody>
+            @for (d of districts(); track d.id) {
+              <tr>
+                <td>{{ d.id }}</td>
+                <td>{{ d.name }}</td>
+                <td>{{ d.listingsCount }}</td>
+                <td class="actions">
+                  <button type="button" (click)="renameDistrict(d)">Переименовать</button>
+                  <button type="button" class="danger" [disabled]="busy() || d.listingsCount > 0"
+                          [attr.title]="d.listingsCount > 0 ? 'В районе есть объявления' : null"
+                          (click)="removeDistrict(d)">Удалить</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</main>

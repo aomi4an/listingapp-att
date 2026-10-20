@@ -1,0 +1,5 @@
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.head h1 { margin: 0 0 16px; }
+.refresh { background: white; border: 1px solid #d1d5db; border-radius: 6px; padding: 8px 14px; }
+.refresh:disabled { opacity: .6; cursor: wait; }
+.error-box button { margin-top: 8px; background: #b91c1c; color: white; border: none; padding: 8px 14px; border-radius: 6px; }

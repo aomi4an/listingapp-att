@@ -1,0 +1,11 @@
+bin/
+obj/
+node_modules/
+.angular/
+dist/
+web/
+publish/
+*.tar.gz
+api/wwwroot/*
+!api/wwwroot/.gitkeep
+api/App_Data/

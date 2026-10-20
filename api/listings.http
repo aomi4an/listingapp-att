@@ -1,0 +1,182 @@
+# Расширение REST Client (VS Code).
+# @key — ключ администратора (Admin:ApiKey), нужен только для районов и для действий администратора.
+# @token — токен из ответа register/login (шаг «Вход» ниже), @token2 — токен второго пользователя.
+@host = http://localhost:5000
+@api = {{host}}
+@key =
+@token = вставьте-токен-из-ответа-login
+@token2 = вставьте-токен-второго-пользователя
+
+############################ ЧТЕНИЕ (открыто всем) ############################
+
+### Районы
+GET {{api}}/api/districts
+
+### Список
+GET {{api}}/api/listings
+
+### Фильтр по району (id) и цене
+GET {{api}}/api/listings?districtId=1&maxPrice=50000
+
+### Количество
+GET {{api}}/api/listings/count
+
+### Одно объявление
+GET {{api}}/api/listings/1
+
+### Несуществующее — ожидаем 404 в формате ProblemDetails
+GET {{api}}/api/listings/999
+
+############################ АУТЕНТИФИКАЦИЯ (урок 7) ############################
+
+### Регистрация — 200 и token
+POST {{api}}/api/auth/register
+Content-Type: application/json
+
+{ "email": "Aziz@Example.uz", "password": "secret123" }
+
+### Повторная регистрация того же email (другой регистр) — 400, errors.email
+POST {{api}}/api/auth/register
+Content-Type: application/json
+
+{ "email": "aziz@example.uz ", "password": "secret123" }
+
+### Слабый пароль — 400, errors.password
+POST {{api}}/api/auth/register
+Content-Type: application/json
+
+{ "email": "new@example.uz", "password": "short" }
+
+### Вход — 200 и token (скопируйте token в @token)
+POST {{api}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "aziz@example.uz", "password": "secret123" }
+
+### Неверный пароль — 401, тот же текст, что и для неизвестного email
+POST {{api}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "aziz@example.uz", "password": "wrong-pass1" }
+
+### Кто я — 200 с токеном; без заголовка — 401
+GET {{api}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### Смена пароля — 204; с неверным текущим — 400, errors.currentPassword
+POST {{api}}/api/auth/change-password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "currentPassword": "secret123", "newPassword": "secret456" }
+
+############################ ОБЪЯВЛЕНИЯ: ЗАПИСЬ ############################
+
+### 1. Без токена — ожидаем 401
+POST {{api}}/api/listings
+Content-Type: application/json
+
+{ "title": "2-комнатная у метро", "price": 450, "rooms": 2, "districtId": 1 }
+
+### 2. Всё пустое — 400, application/problem+json, errors: title, price, rooms, districtId (camelCase!)
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "", "price": 0, "rooms": 0, "districtId": 0 }
+
+### 3. Заголовок из пробелов, 15 комнат — 400: title «Укажите заголовок», rooms «Комнат — от 1 до 10»
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "   ", "price": 500, "rooms": 15, "districtId": 1 }
+
+### 4. Заголовок короче 5 символов — 400, title «Не короче 5 символов»
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "Дом", "price": 500, "rooms": 2, "districtId": 1 }
+
+### 5. Несуществующий район — 400, districtId «Район не найден»
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "Квартира", "price": 500, "rooms": 2, "districtId": 999 }
+
+### 6. Неверный тип — ошибка привязки, не валидатора: 400 без errors (или с ключом $.price)
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "Квартира", "price": "abc", "rooms": 2, "districtId": 1 }
+
+### 7. Верный запрос — 201 Created, заголовок Location, в ответе ownerId = ваш id
+POST {{api}}/api/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "2-комнатная у метро", "price": 450, "rooms": 2, "districtId": 1, "address": "ул. Бунёдкор, 5" }
+
+### 8. PUT своего объявления — 204 (подставьте id из шага 7)
+PUT {{api}}/api/listings/9
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "2-комн. рядом с метро (цена снижена)", "price": 420, "rooms": 2, "districtId": 1, "address": "Чиланзар, д. 4" }
+
+### 9. PUT чужого объявления (токен второго пользователя) — 403
+PUT {{api}}/api/listings/9
+Authorization: Bearer {{token2}}
+Content-Type: application/json
+
+{ "title": "Попытка чужого изменения", "price": 100, "rooms": 1, "districtId": 1 }
+
+### 10. PUT с ошибкой — 400; несуществующий id с верными данными — 404
+PUT {{api}}/api/listings/999
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "Квартира у парка", "price": 500, "rooms": 2, "districtId": 1 }
+
+### 11. DELETE объявления из стартовых данных (автора нет) с обычным токеном — 403
+DELETE {{api}}/api/listings/3
+Authorization: Bearer {{token}}
+
+### 12. DELETE несуществующего — 404; своего — 204, повторно — 404
+DELETE {{api}}/api/listings/999
+Authorization: Bearer {{token}}
+
+### Мои объявления — 200, только ваши; без токена — 401
+GET {{api}}/api/listings/mine
+Authorization: Bearer {{token}}
+
+### Администратор по ключу может менять и удалять любые объявления — 204
+DELETE {{api}}/api/listings/3
+X-Admin-Key: {{key}}
+
+############################ АДМИНИСТРИРОВАНИЕ (по ключу) ############################
+
+### Проверка ключа администратора — 204 или 401
+GET {{api}}/api/admin/ping
+X-Admin-Key: {{key}}
+
+### Добавить район — ожидаем 201 (повторно — 409)
+POST {{api}}/api/districts
+Content-Type: application/json
+X-Admin-Key: {{key}}
+
+{ "name": "Сергели" }
+
+### Переименовать район — 204
+PUT {{api}}/api/districts/4
+Content-Type: application/json
+X-Admin-Key: {{key}}
+
+{ "name": "Сергелийский" }
+
+### Удалить район — 204, если пустой; 409, если в нём есть объявления
+DELETE {{api}}/api/districts/4
+X-Admin-Key: {{key}}

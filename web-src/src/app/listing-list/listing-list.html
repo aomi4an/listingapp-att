@@ -1,0 +1,12 @@
+<p class="muted">Показано {{ listings().length }} из {{ total() }}</p>
+
+<div class="grid">
+  @for (l of listings(); track l.id) {
+    <app-listing-card
+      [listing]="l"
+      [active]="l.id === selectedId()"
+      (selected)="selected.emit($event)" />
+  } @empty {
+    <p class="muted">По вашим условиям ничего не найдено</p>
+  }
+</div>

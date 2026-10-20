@@ -1,0 +1,23 @@
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; display: grid; gap: 12px; }
+
+.line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.line.title { width: 75%; height: 18px; }
+.line.short { width: 45%; }
+.line.price { width: 35%; height: 22px; }
+.line.footer { width: 100%; height: 28px; }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line { animation: none; }
+}

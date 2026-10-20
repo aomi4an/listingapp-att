@@ -1,0 +1,4 @@
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.head h1 { margin: 0 0 16px; }
+.add { background: #0f766e; color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; }
+.error-box button { margin-top: 8px; background: #b91c1c; color: white; border: none; padding: 8px 14px; border-radius: 6px; }

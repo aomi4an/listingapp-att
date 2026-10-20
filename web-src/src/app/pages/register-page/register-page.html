@@ -1,0 +1,32 @@
+<h1>Регистрация</h1>
+
+@if (generalError(); as msg) {
+  <div class="error-box">{{ msg }}</div>
+}
+
+<form (submit)="save($event)" novalidate class="form">
+  <label class="field">
+    <span>Email</span>
+    <input type="email" autocomplete="email" [formField]="registerForm.email" />
+    @if (registerForm.email().touched()) {
+      @for (e of registerForm.email().errors(); track $index) {
+        <small class="field-error">{{ e.message }}</small>
+      }
+    }
+  </label>
+
+  <label class="field">
+    <span>Пароль (от 8 символов, с цифрой)</span>
+    <input type="password" autocomplete="new-password" [formField]="registerForm.password" />
+    @if (registerForm.password().touched()) {
+      @for (e of registerForm.password().errors(); track $index) {
+        <small class="field-error">{{ e.message }}</small>
+      }
+    }
+  </label>
+
+  <button type="submit" class="primary" [disabled]="registerForm().submitting()">
+    {{ registerForm().submitting() ? 'Регистрируем…' : 'Зарегистрироваться' }}
+  </button>
+  <p>Уже есть аккаунт? <a routerLink="/login">Войти</a></p>
+</form>

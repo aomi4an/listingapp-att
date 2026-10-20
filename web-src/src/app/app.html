@@ -1,0 +1,19 @@
+<header class="topbar">
+  <a routerLink="/" class="brand">Квартиры · объявления</a>
+  <nav class="nav">
+    @if (auth.isLoggedIn()) {
+      <a routerLink="/my">Мои объявления</a>
+      <a routerLink="/listings/new" class="add">+ Добавить</a>
+      <span class="who">{{ auth.user()?.email }}</span>
+      <button type="button" class="link" (click)="auth.logout()">Выйти</button>
+    } @else {
+      <a routerLink="/login">Войти</a>
+      <a routerLink="/register">Регистрация</a>
+    }
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet />
+  <p class="admin-link"><a routerLink="/admin">Управление</a></p>
+</main>

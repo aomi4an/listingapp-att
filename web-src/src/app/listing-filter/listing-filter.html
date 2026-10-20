@@ -1,0 +1,33 @@
+<form class="filter" (submit)="$event.preventDefault()">
+  <label>
+    Район
+    <select [value]="districtId() ?? ''" (change)="onDistrict($event)">
+      <option value="">Все районы</option>
+      @for (d of districts(); track d.id) {
+        <option [value]="d.id">{{ d.name }} ({{ d.listingsCount }})</option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Цена до, у.е.
+    <input type="number" min="0" step="1000" placeholder="любая"
+           [value]="maxPrice() ?? ''" (input)="onPrice($event)">
+  </label>
+
+  <label>
+    Сортировка
+    <select [value]="sort()" (change)="onSort($event)">
+      <option value="newest">сначала новые</option>
+      <option value="priceAsc">по цене ↑</option>
+      <option value="priceDesc">по цене ↓</option>
+    </select>
+  </label>
+
+  <label class="check">
+    <input type="checkbox" [checked]="onlyFavorites()" (change)="onFavorites($event)">
+    Только избранное
+  </label>
+
+  <button type="button" (click)="reset()">Сбросить</button>
+</form>

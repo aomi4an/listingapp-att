@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ListingsApi</RootNamespace>
+    <!-- Не требует libicu на сервере; на сравнение строк в SQLite не влияет -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Хранилище user-secrets для Jwt:Key при разработке (dotnet user-secrets set "Jwt:Key" "...") -->
+    <UserSecretsId>listings-api-dev-secrets</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="*" />
+
+    <!-- Урок 6: валидация -->
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.*" />
+
+    <!-- Урок 7: JWT и хеширование паролей (PasswordHasher<T>) -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.*" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.*" />
+  </ItemGroup>
+
+</Project>

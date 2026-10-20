@@ -1,0 +1,6 @@
+.actions { margin-top: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.btn { background: #0f766e; color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; }
+.danger { background: white; color: #b91c1c; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 6px; }
+.danger:disabled { opacity: .6; cursor: wait; }
+.error { color: #b91c1c; }
+.error-box button { margin-top: 8px; background: #b91c1c; color: white; border: none; padding: 8px 14px; border-radius: 6px; }

@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+web/
+node_modules/
+publish/
+deploy/
+*.tar.gz
+api/wwwroot/*
+api/App_Data/
+.git/

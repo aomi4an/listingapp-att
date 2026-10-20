@@ -1,0 +1,24 @@
+<aside class="panel">
+  <header>
+    <h2>{{ listing().title }}</h2>
+  </header>
+
+  <dl>
+    <dt>Район</dt>       <dd>{{ listing().districtName }}</dd>
+    <dt>Комнат</dt>
+    <dd>
+      @switch (listing().rooms) {
+        @case (1) { студия }
+        @case (2) { две комнаты }
+        @case (3) { три комнаты }
+        @default { {{ listing().rooms }} комнат }
+      }
+    </dd>
+    <dt>Цена</dt>        <dd>{{ listing().price | number:'1.0-0' }} у.е.</dd>
+    <dt>За комнату</dt>  <dd>{{ perRoom() | number:'1.0-0' }} у.е.</dd>
+    <dt>Опубликовано</dt><dd>{{ listing().createdAt | date:'dd.MM.yyyy HH:mm' }}</dd>
+    @if (listing().address; as address) {
+      <dt>Адрес</dt>     <dd>{{ address }}</dd>
+    }
+  </dl>
+</aside>

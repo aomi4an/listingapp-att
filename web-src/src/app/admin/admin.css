@@ -1,0 +1,35 @@
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
+.panel.narrow { max-width: 480px; }
+.panel h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.row.between { justify-content: space-between; }
+.row input { flex: 1 1 220px; }
+
+.form { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px 16px; margin: 12px 0 16px; display: grid; gap: 12px; }
+.form h3 { margin: 0; font-size: 1rem; }
+.form label { display: grid; gap: 4px; font-size: .9rem; color: #374151; }
+.form .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 640px) { .form .grid { grid-template-columns: 1fr; } }
+
+.scroll { overflow-x: auto; margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
+th { color: #6b7280; font-weight: 600; white-space: nowrap; }
+td.actions { white-space: nowrap; text-align: right; }
+td.actions button + button { margin-left: 6px; }
+
+button { padding: 7px 12px; border: 1px solid #d1d5db; border-radius: 6px; background: #fff; }
+button:hover:not(:disabled) { background: #f3f4f6; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.primary { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+button.primary:hover:not(:disabled) { background: #1e40af; }
+button.danger { color: #b91c1c; border-color: #fecaca; }
+button.danger:hover:not(:disabled) { background: #fef2f2; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }
+
+.ok { color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 12px; }
+.error { color: #b91c1c; }
+p.error { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 12px; }
+code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; }

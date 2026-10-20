@@ -1,0 +1,32 @@
+<h1>Вход</h1>
+
+@if (generalError(); as msg) {
+  <div class="error-box">{{ msg }}</div>
+}
+
+<form (submit)="save($event)" novalidate class="form">
+  <label class="field">
+    <span>Email</span>
+    <input type="email" autocomplete="email" [formField]="loginForm.email" />
+    @if (loginForm.email().touched()) {
+      @for (e of loginForm.email().errors(); track $index) {
+        <small class="field-error">{{ e.message }}</small>
+      }
+    }
+  </label>
+
+  <label class="field">
+    <span>Пароль</span>
+    <input type="password" autocomplete="current-password" [formField]="loginForm.password" />
+    @if (loginForm.password().touched()) {
+      @for (e of loginForm.password().errors(); track $index) {
+        <small class="field-error">{{ e.message }}</small>
+      }
+    }
+  </label>
+
+  <button type="submit" class="primary" [disabled]="loginForm().submitting()">
+    {{ loginForm().submitting() ? 'Входим…' : 'Войти' }}
+  </button>
+  <p>Нет аккаунта? <a routerLink="/register">Регистрация</a></p>
+</form>

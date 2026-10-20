@@ -1,0 +1,28 @@
+<article class="card" [class.active]="active()">
+  <header>
+    <h3>{{ listing().title }}</h3>
+    <span class="badges">
+      @if (isNew()) {
+        <span class="badge new">новое</span>
+      }
+      @if (isCheap()) {
+        <span class="badge">выгодно</span>
+      }
+      <button type="button" class="fav" [class.on]="isFavorite()"
+              [attr.aria-pressed]="isFavorite()"
+              [attr.aria-label]="isFavorite() ? 'Убрать из избранного' : 'В избранное'"
+              (click)="toggleFavorite()">{{ isFavorite() ? '★' : '☆' }}</button>
+    </span>
+  </header>
+
+  <p class="muted">{{ listing().districtName }} · {{ roomsLabel() }}</p>
+
+  <p class="price">{{ listing().price | number:'1.0-0' }} у.е.</p>
+
+  <footer class="muted">
+    <time [attr.datetime]="listing().createdAt">
+      {{ listing().createdAt | date:'d MMM yyyy' }}
+    </time>
+    <a class="more" [routerLink]="['/listings', listing().id]">Подробнее</a>
+  </footer>
+</article>

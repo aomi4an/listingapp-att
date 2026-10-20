@@ -1,0 +1,8 @@
+.form { display: grid; gap: 16px; max-width: 400px; }
+.field { display: grid; gap: 4px; }
+.field span { font-weight: 600; font-size: 14px; }
+.field input { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; }
+.field:has(.field-error) input { border-color: #b91c1c; }
+.field-error { color: #b91c1c; }
+.primary { background: #0f766e; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; justify-self: start; }
+.primary:disabled { opacity: .6; cursor: wait; }
