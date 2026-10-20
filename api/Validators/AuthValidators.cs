@@ -38,7 +38,7 @@ public class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordRe
 internal static class PasswordRules
 {
     // Общие правила нового пароля: регистрация и смена пароля
-    public static IRuleBuilderOptions<T, string> ApplyPasswordRules<T>(this IRuleBuilder<T, string> rule) =>
+    public static IRuleBuilderOptions<T, string> ApplyPasswordRules<T>(this IRuleBuilderInitial<T, string> rule) =>
         rule.Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("Укажите пароль")
             .MinimumLength(8).WithMessage("Пароль — от 8 символов")
