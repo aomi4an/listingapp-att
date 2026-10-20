@@ -25,7 +25,6 @@
 
     <!-- Урок 7: JWT и хеширование паролей (PasswordHasher<T>) -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.*" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.*" />
   </ItemGroup>
 
 </Project>
